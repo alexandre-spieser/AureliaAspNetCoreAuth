@@ -6,7 +6,7 @@ It uses the OpenId to generate tokens after a successful login.
 
 The Token is then used to connect to a SignalR persistent connection, therefore establishing an authenticated real-time connection. The status of the user is broadcasted and if another client connects, it is communicated to all the online clients.
 
-## Limitations: 
+## Limitations
 * There is no database implementation, this project is supposed to be used as a boiler plate for you to build on top of using the database technology you find the most suitable for your application.
 * There is no refresh token logic.
 
