@@ -1,0 +1,25 @@
+﻿<!--Following our simple app-building convention, the App class will be databound to the above view in app.html. 
+    A large part of this markup deals with setting up the main navigation structure. 
+    But before we get into that...do you see the require elements at the top of the view? 
+    In the same way that you can use import statements in ES2015/2016, Aurelia enables you to use require elements in HTML. 
+    The require element enables loading and including of functionality such as custom elements and behaviors, 
+    and in this case, CSS. Here, since our sample app is going to use some bootstrap styles and icons from font-awesome, 
+    we "require" those style sheets. With that in place, we can use bootstrap to lay out our navigation structure, as above.
+    But that's not the interesting part of this view. What we really want to focus on is the binding and custom elements...
+
+Since you've seen basic binding and string interpolation already, let's focus on the new stuff. 
+    Take a look at the navbar-nav ul element. Its li demonstrates how to use a repeater with the following 
+    expression repeat.for="row of router.navigation". This will create one li for each item in the router.navigation array. 
+    The local variable is row and you can see that used throughout the li and its child elements.-->
+
+<template>
+    <require from="bootstrap/css/bootstrap.css"></require>
+    <require from="font-awesome/css/font-awesome.css"></require>
+    <require from='./nav-bar'></require>
+
+    <nav-bar router.bind="router"></nav-bar>
+
+    <div class="page-host">
+        <router-view></router-view>
+    </div>
+</template>

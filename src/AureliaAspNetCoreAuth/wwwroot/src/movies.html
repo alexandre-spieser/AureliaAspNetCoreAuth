@@ -1,0 +1,14 @@
+﻿<template>
+    <section class="au-enter-active">
+        <h2>${heading}</h2>
+        <div class="row au-stagger">
+            <div class="col-sm-6 col-md-3 card-container" repeat.for="movie of movies">
+                <div class="card">
+                    <div class="content">
+                        <p class="name">${movie.title}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>

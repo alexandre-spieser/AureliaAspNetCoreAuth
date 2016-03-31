@@ -1,0 +1,38 @@
+<!--<!DOCTYPE html>
+<html>
+  <head>
+    <title>Aurelia</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      <script src="https://code.jquery.com/jquery-2.1.4.js" type="text/javascript"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/signalr.js/2.2.0/jquery.signalR.js" type="text/javascript"></script>
+  </head>
+
+  <body aurelia-app="main">
+      <div class="splash">
+          <div class="message">Welcome</div>
+          <i class="fa fa-spinner fa-spin"></i>
+      </div>
+
+    <script src="jspm_packages/system.js"></script>
+  <script src="config.js"></script>
+
+  <script>
+      // prevent caching
+      var systemLocate = System.locate;
+      System.locate = function (load) {
+          var System = this;
+          return Promise.resolve(systemLocate.call(this, load)).then(function (address) {
+              if (address.lastIndexOf("html.js") > -1) return address;
+              if (address.lastIndexOf("css.js") > -1) return address;
+              return address + System.cacheBust;
+          });
+      };
+      System.cacheBust = '?bust=' + Date.now();
+      SystemJS.import('aurelia-bootstrapper');
+  </script>
+
+  </body>
+</html>-->

@@ -1,0 +1,49 @@
+﻿<template>
+    <section class="au-enter-active">
+        <br />
+        <div class="container">
+            <div class="jumbotron">
+                <div class="page-header text-center">
+                    <p>Welcome to Aurelia ASP.NET Auth.</p>
+                    <p>Login hint:</p>
+                    <p>Email: alex@123.com, Password: AureliaNetAuth</p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <form class="form-horizontal"
+                          validate.bind="validation"
+                          submit.trigger="login()">
+
+                        <h2 class="form-login-heading">Login</h2>
+
+                        <div class="form-group">
+                            <label class="col-sm-12">Email</label>
+                            <input class="form-control" type="email" placeholder="Email"
+                                   value.bind="email" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-12">Password</label>
+                            <input class="form-control" type="password" placeholder="Password"
+                                   value.bind="password">
+                        </div>
+
+                        <div class="form-group">
+                            <input class="btn btn-primary"
+                                   type="submit"
+                                   value="Login" />
+                        </div>
+                        <br />
+                        <div class="alert alert-danger" if.bind="(message.length > 0)">
+                            ${message}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</template>
