@@ -10,9 +10,7 @@ The Token is then used to connect to a SignalR persistent connection, therefore 
 * There is no database implementation, this project is supposed to be used as a boiler plate for you to build on top of using the database technology you find the most suitable for your application.
 * There is no refresh token logic.
 
-Credits and references:
-
-## Credits
+## Credits and references
 * Toastr https://github.com/CodeSeven/toastr
 * OpenIdConnect Samples https://github.com/aspnet-contrib/AspNet.Security.OpenIdConnect.Server
 * SignalR-Server samples https://github.com/aspnet/SignalR-Server
@@ -20,7 +18,7 @@ Credits and references:
 * Building Applications with Aurelia by Scott Allen https://app.pluralsight.com/library/courses/building-applications-aurelia/table-of-contents
 
 ## Copyright
-Copyright © 2012-2015
+Copyright © 2016
 
 ## License
 AureliaAspNetCoreAuth is under MIT license - http://www.opensource.org/licenses/mit-license.php
