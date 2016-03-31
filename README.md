@@ -1,6 +1,6 @@
 # AureliaAspNetCoreAuth
 
-This application is an example of implementation of Token based authentication using the Aurelia front end framework and ASP.NET core.
+This single page application is an example of token based authentication implementation using the Aurelia front end framework and ASP.NET core.
 
 It uses the OpenId to generate tokens after a successful login.
 
