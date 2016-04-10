@@ -2,7 +2,7 @@
 
 This single page application is an example of token based authentication implementation using the Aurelia front end framework and ASP.NET core.
 
-It uses the OpenId to generate tokens after a successful login.
+It uses OpenId to generate tokens after a successful login.
 
 The Token is then used to connect to a SignalR persistent connection, therefore establishing an authenticated real-time connection. The status of the user is broadcasted and if another client connects, it is communicated to all the online clients.
 
