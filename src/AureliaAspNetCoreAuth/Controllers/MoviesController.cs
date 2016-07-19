@@ -1,7 +1,7 @@
 ﻿using AspNet.Security.OpenIdConnect.Server;
 using AureliaAspNetCoreAuth.Models;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;

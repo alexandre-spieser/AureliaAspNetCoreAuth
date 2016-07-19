@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNet.Mvc;
 using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-using Microsoft.AspNet.Mvc.Formatters;
-using Microsoft.AspNet.Authentication.JwtBearer;
 using AureliaAspNetCoreAuth.Connections;
 using AureliaAspNetCoreAuth.Providers;
 using AureliaAspNetCoreAuth.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
+using AspNet.Security.OAuth.Validation;
+using Microsoft.Framework.DependencyInjection;
+//using Mvc.Server.Extensions;
+//using Mvc.Server.Models;
+//using Mvc.Server.Providers;
 
 namespace AureliaAspNetCoreAuth
 {
@@ -27,6 +25,7 @@ namespace AureliaAspNetCoreAuth
 
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json");
 
             builder.AddEnvironmentVariables();
@@ -36,14 +35,13 @@ namespace AureliaAspNetCoreAuth
         public IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
         {
             services.AddAuthentication();
-            services.AddCaching();
+
             services.AddSignalR();
             // Add framework services.
-            services.Configure<AppSettings>(Configuration);
-
+            //services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             // Add MVC services to the services container.
             services.AddMvc()
               .AddJsonOptions(opts =>
@@ -56,9 +54,14 @@ namespace AureliaAspNetCoreAuth
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            var config = Configuration.Get<AppSettings>();
-            string serverUri = config.UriSettings.ServerURi;
-            string clientUri = config.UriSettings.ClientUri;
+
+            var configurationSection = Configuration.GetSection("AppSettings");
+            //var title = configurationSection.Get<string>("ApplicationTitle");
+            //var topItmes = configurationSection.Get<int>("TopItemsOnStart");
+            //var showLink = configurationSection.Get<bool>("ShowEditLink");
+            //var config = Configuration.GetSection("UriSettings");
+            //string serverUri = config.UriSettings.ServerURi;
+            //string clientUri = config.UriSettings.ClientUri;
 
             if (env.IsDevelopment())
             {
@@ -67,7 +70,6 @@ namespace AureliaAspNetCoreAuth
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            app.UseIISPlatformHandler();
 
             if (env.IsDevelopment())
             {
@@ -75,26 +77,19 @@ namespace AureliaAspNetCoreAuth
             }
 
             // Add a new middleware validating access tokens.
-            app.UseJwtBearerAuthentication(options => {
+            app.UseOAuthValidation(options =>
+            {
                 // Automatic authentication must be enabled
                 // for SignalR to receive the access token.
                 options.AutomaticAuthenticate = true;
 
-                // Automatically disable the HTTPS requirement for development scenarios.
-                options.RequireHttpsMetadata = !env.IsDevelopment();
-
-                // Note: the audience must correspond to the address of the SignalR server.
-                options.Audience = clientUri;
-
-                // Note: the authority must match the address of the identity server.
-                options.Authority = serverUri;
-
-                options.Events = new JwtBearerEvents
+                options.Events = new OAuthValidationEvents
                 {
                     // Note: for SignalR connections, the default Authorization header does not work,
                     // because the WebSockets JS API doesn't allow setting custom parameters.
                     // To work around this limitation, the access token is retrieved from the query string.
-                    OnReceivingToken = context => {
+                    OnRetrieveToken = context =>
+                    {
                         // Note: when the token is missing from the query string,
                         // context.Token is null and the JWT bearer middleware will
                         // automatically try to retrieve it from the Authorization header.
@@ -105,17 +100,43 @@ namespace AureliaAspNetCoreAuth
                 };
             });
 
-            app.UseWebSockets();
-
             app.UseSignalR<RawConnection>("/signalr");
             //app.UseSignalR<SimpleConnection>("/signalr");
 
             // Add a new middleware issuing access tokens.
-            app.UseOpenIdConnectServer(options => {
+            app.UseOpenIdConnectServer(options =>
+            {
                 options.Provider = new AuthenticationProvider();
+                // Enable the authorization, logout, token and userinfo endpoints.
+                //options.AuthorizationEndpointPath = "/connect/authorize";
+                //options.LogoutEndpointPath = "/connect/logout";
+                options.TokenEndpointPath = "/connect/token";
+                //options.UserinfoEndpointPath = "/connect/userinfo";
+
+                // Note: if you don't explicitly register a signing key, one is automatically generated and
+                // persisted on the disk. If the key cannot be persisted, an exception is thrown.
+                // 
+                // On production, using a X.509 certificate stored in the machine store is recommended.
+                // You can generate a self-signed certificate using Pluralsight's self-cert utility:
+                // https://s3.amazonaws.com/pluralsight-free/keith-brown/samples/SelfCert.zip
+                // 
+                // options.SigningCredentials.AddCertificate("7D2A741FE34CC2C7369237A5F2078988E17A6A75");
+                // 
+                // Alternatively, you can also store the certificate as an embedded .pfx resource
+                // directly in this assembly or in a file published alongside this project:
+                // 
+                // options.SigningCredentials.AddCertificate(
+                //     assembly: typeof(Startup).GetTypeInfo().Assembly,
+                //     resource: "Nancy.Server.Certificate.pfx",
+                //     password: "Owin.Security.OpenIdConnect.Server");
+
+                // Note: see AuthorizationController.cs for more
+                // information concerning ApplicationCanDisplayErrors.
+                options.ApplicationCanDisplayErrors = true;
+                options.AllowInsecureHttp = true;
             });
 
-            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+            //app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
             app.UseStaticFiles();
 
@@ -127,8 +148,5 @@ namespace AureliaAspNetCoreAuth
             });
 
         }
-
-        // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }
