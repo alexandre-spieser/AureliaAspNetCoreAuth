@@ -1,21 +1,13 @@
-﻿using AspNet.Security.OpenIdConnect.Server;
-using AureliaAspNetCoreAuth.Models;
+﻿using AureliaAspNetCoreAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AureliaAspNetCoreAuth.Controllers
 {
     [Authorize]
     public class MoviesController : Controller
     {
-
-
-
-        [Authorize]
         [HttpGet("/movies")]
         public IActionResult Get()
         {
