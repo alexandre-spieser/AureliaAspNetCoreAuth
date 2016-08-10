@@ -28,9 +28,13 @@ AureliaAspNetCoreAuth is under MIT license - http://www.opensource.org/licenses/
 
 ## Donations
 
-Feeling like my work is worth a coffee? BTC Donations: 1Qc5ZpNA7g66KEEMcz7MXxwNyyoRyKJJZ
+Feeling like my work is worth a coffee?
 
-Greatly appreciated!
+Donations are welcome and will go towards further development of this project as well as other related projects. Use the wallet address below to donate.
+
+BTC Donations: 1Qc5ZpNA7g66KEEMcz7MXxwNyyoRyKJJZ
+
+*Thank you for your support and generosity!*
 
 
 
